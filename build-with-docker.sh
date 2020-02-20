@@ -31,7 +31,7 @@ for docker_arch in "${docker_archs[@]}"; do
        exit 1
     fi
 
-    docker_tag="rhasspy/kaldi:2019-${friendly_arch}"
+    docker_tag="rhasspy/phonetisaurus:2019-${friendly_arch}"
 
     docker build "${this_dir}" \
         --build-arg "BUILD_FROM=${docker_arch}/debian:stretch" \

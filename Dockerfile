@@ -24,7 +24,20 @@ ENV LDFLAGS="-L/build/lib"
 RUN cd / && tar -xzf /phonetisaurus-2019.tar.gz && \
     cd phonetisaurus && \
     ./configure --prefix=/build \
+        --disable-static \
         --with-openfst-includes=/build/include \
         --with-openfst-libs=/build/lib && \
     make -j $MAKE_THREADS && \
     make install
+
+# Copy all lib dependencies
+RUN ldd /build/lib/*.so* | grep '=> /lib' | awk '{ print $3 }' | xargs -n1 -I {} cp -vL '{}' /build/lib/
+
+# Copy all binary dependencies
+RUN ldd /build/bin/* | grep '=> /lib' | awk '{ print $3 }' | xargs -n1 -I {} cp -vnL '{}' /build/lib/
+
+# Delete libc
+RUN rm /build/lib/libc.so*
+
+# Delete static libs
+RUN find /build -type f -name '*.a' -delete
