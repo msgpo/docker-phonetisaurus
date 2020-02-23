@@ -30,11 +30,5 @@ RUN cd / && tar -xzf /phonetisaurus-2019.tar.gz && \
     make -j $MAKE_THREADS && \
     make install
 
-# Copy all lib dependencies
-RUN ldd /build/lib/*.so* /build/bin/* | grep '=> /lib' | awk '{ print $3 }' | xargs -n1 -I {} cp -vL '{}' /build/lib/
-
-# Delete libc
-RUN rm /build/lib/libc.so*
-
 # Delete static libs
 RUN find /build -type f -name '*.a' -delete
