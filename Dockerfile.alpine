@@ -6,17 +6,17 @@ ARG MAKE_THREADS=8
 COPY etc/qemu-arm-static /usr/bin/
 COPY etc/qemu-aarch64-static /usr/bin/
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        build-essential
+RUN apk update && \
+    apk add --no-cache \
+        build-base
 
 ARG FRIENDLY_ARCH
 
-COPY dist/openfst-1.6.9-${FRIENDLY_ARCH}.tar.gz /
+COPY dist/openfst-1.6.9-${FRIENDLY_ARCH}-alpine.tar.gz /
 COPY download/phonetisaurus-2019.tar.gz /
 
 RUN mkdir -p /build && \
-    tar -C /build -xvf /openfst-1.6.9-${FRIENDLY_ARCH}.tar.gz
+    tar -C /build -xvf /openfst-1.6.9-${FRIENDLY_ARCH}-alpine.tar.gz
 
 ENV CXXFLAGS="-I/build/include"
 ENV LDFLAGS="-L/build/lib"
